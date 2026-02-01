@@ -1,0 +1,55 @@
+.hero {
+  height: 120px;
+  background:
+    linear-gradient(120deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.05)),
+    radial-gradient(circle at 20% 20%, #9a7b5f, #5f6b6b 40%, #dfe7ea 100%);
+  background-size: cover;
+}
+
+.form-shell {
+  max-width: 560px;
+}
+
+.card pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.form-control::placeholder,
+.form-select::placeholder,
+textarea::placeholder {
+  color: #9aa3ad;
+}
+
+.was-validated .form-check-input:valid,
+.form-check-input.is-valid {
+  border-color: var(--bs-border-color);
+  box-shadow: none;
+}
+
+.was-validated .form-check-input:invalid,
+.form-check-input.is-invalid {
+  border-color: var(--bs-danger) !important;
+  accent-color: var(--bs-danger);
+  box-shadow: 0 0 0 1px rgba(220, 53, 69, 0.25);
+}
+
+.was-validated .form-check-input:valid ~ .form-check-label,
+.form-check-input.is-valid ~ .form-check-label {
+  color: inherit;
+}
+
+.was-validated .form-check-input.is-invalid ~ .form-check-label,
+.form-check-input.is-invalid ~ .form-check-label {
+  color: var(--bs-danger);
+}
+
+.btn-info {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0ea5b7;
+  --bs-btn-border-color: #0ea5b7;
+  --bs-btn-hover-bg: #0c95a6;
+  --bs-btn-hover-border-color: #0c95a6;
+  --bs-btn-active-bg: #0b8696;
+  --bs-btn-active-border-color: #0b8696;
+}

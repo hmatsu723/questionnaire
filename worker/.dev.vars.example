@@ -1,0 +1,6 @@
+BREVO_API_KEY=your_api_key
+BREVO_SENDER_EMAIL=sender@example.com
+BREVO_SENDER_NAME=アンケート
+BREVO_TO_EMAIL=to@example.com
+BREVO_TO_NAME=担当者
+DUMMY_SEND=true

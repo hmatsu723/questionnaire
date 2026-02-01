@@ -1,29 +1,584 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>お問い合わせフォーム（準備中）</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-<body>
-  <h1>お問い合わせフォーム（準備中）</h1>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>アンケート</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-light">
+    <header class="hero" aria-hidden="true"></header>
 
-  <p>
-    本サイトは現在準備中です。<br>
-    将来的に、アンケート・お問い合わせ内容を
-    指定のメールアドレスへ送信する目的で使用予定です。
-  </p>
+    <main class="container py-4">
+      <div class="mx-auto form-shell">
+        <h1 class="h4 text-center mb-2">アンケート</h1>
+        <p class="text-center text-muted small mb-4">
+          当日を有意義な時間にすべく、事前にアンケートへのご回答にご協力ください。<br />
+          <span class="text-nowrap">（所要時間：約5分）</span>
+        </p>
 
-  <h2>運営者</h2>
-  <p>個人事業主 松本 宏崇</p>
+        <div id="alertPlaceholder" class="mb-3"></div>
 
-  <h2>連絡先</h2>
-  <p>contact@mh-syscore.com</p>
+        <div class="bg-white border rounded-3 shadow-sm p-4">
+          <form
+            id="questionnaireForm"
+            class="needs-validation"
+            method="post"
+            action="/api/submit"
+            novalidate
+          >
+            <div class="mb-3">
+              <label class="form-label">
+                名前 <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <label class="form-label small text-muted mb-1" for="lastName">姓</label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    class="form-control"
+                    autocomplete="family-name"
+                    required
+                  />
+                  <div class="invalid-feedback">姓を入力してください。</div>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted mb-1" for="firstName">名</label>
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    class="form-control"
+                    autocomplete="given-name"
+                    required
+                  />
+                  <div class="invalid-feedback">名を入力してください。</div>
+                </div>
+              </div>
+            </div>
 
-  <h2>個人情報の取り扱いについて</h2>
-  <p>
-    本サイトでは、お問い合わせ内容をメール送信する目的のみに利用し、
-    サーバー上に保存は行いません。
-  </p>
-</body>
+            <div class="mb-3">
+              <label class="form-label">
+                名前（フリガナ） <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <label class="form-label small text-muted mb-1" for="lastNameKana">セイ</label>
+                  <input
+                    id="lastNameKana"
+                    name="lastNameKana"
+                    class="form-control"
+                    pattern="^[ァ-ヶー・]+$"
+                    autocomplete="off"
+                    required
+                    title="カタカナで入力してください。"
+                  />
+                  <div class="invalid-feedback">セイをカタカナで入力してください。</div>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted mb-1" for="firstNameKana">メイ</label>
+                  <input
+                    id="firstNameKana"
+                    name="firstNameKana"
+                    class="form-control"
+                    pattern="^[ァ-ヶー・]+$"
+                    autocomplete="off"
+                    required
+                    title="カタカナで入力してください。"
+                  />
+                  <div class="invalid-feedback">メイをカタカナで入力してください。</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">
+                住所 <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="form-label small text-muted mb-1" for="postalCode">郵便番号</label>
+                  <input
+                    id="postalCode"
+                    name="postalCode"
+                    class="form-control"
+                    inputmode="numeric"
+                    autocomplete="postal-code"
+                    placeholder="123-4567"
+                    required
+                  />
+                  <div class="invalid-feedback">郵便番号を入力してください。</div>
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-muted mb-1" for="prefecture">都道府県</label>
+                  <select id="prefecture" name="prefecture" class="form-select" required>
+                    <option value="" selected>選択してください</option>
+                    <option>北海道</option>
+                    <option>青森県</option>
+                    <option>岩手県</option>
+                    <option>宮城県</option>
+                    <option>秋田県</option>
+                    <option>山形県</option>
+                    <option>福島県</option>
+                    <option>茨城県</option>
+                    <option>栃木県</option>
+                    <option>群馬県</option>
+                    <option>埼玉県</option>
+                    <option>千葉県</option>
+                    <option>東京都</option>
+                    <option>神奈川県</option>
+                    <option>新潟県</option>
+                    <option>富山県</option>
+                    <option>石川県</option>
+                    <option>福井県</option>
+                    <option>山梨県</option>
+                    <option>長野県</option>
+                    <option>岐阜県</option>
+                    <option>静岡県</option>
+                    <option>愛知県</option>
+                    <option>三重県</option>
+                    <option>滋賀県</option>
+                    <option>京都府</option>
+                    <option>大阪府</option>
+                    <option>兵庫県</option>
+                    <option>奈良県</option>
+                    <option>和歌山県</option>
+                    <option>鳥取県</option>
+                    <option>島根県</option>
+                    <option>岡山県</option>
+                    <option>広島県</option>
+                    <option>山口県</option>
+                    <option>徳島県</option>
+                    <option>香川県</option>
+                    <option>愛媛県</option>
+                    <option>高知県</option>
+                    <option>福岡県</option>
+                    <option>佐賀県</option>
+                    <option>長崎県</option>
+                    <option>熊本県</option>
+                    <option>大分県</option>
+                    <option>宮崎県</option>
+                    <option>鹿児島県</option>
+                    <option>沖縄県</option>
+                  </select>
+                  <div class="invalid-feedback">都道府県を選択してください。</div>
+                </div>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label small text-muted mb-1" for="city">市区町村</label>
+                <input
+                  id="city"
+                  name="city"
+                  class="form-control"
+                  autocomplete="address-level2"
+                  required
+                />
+                <div class="invalid-feedback">市区町村を入力してください。</div>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label small text-muted mb-1" for="street">番地</label>
+                <input
+                  id="street"
+                  name="street"
+                  class="form-control"
+                  autocomplete="street-address"
+                  required
+                />
+                <div class="invalid-feedback">番地を入力してください。</div>
+              </div>
+
+              <div>
+                <label class="form-label small text-muted mb-1" for="building">建物名・部屋番号</label>
+                <input id="building" name="building" class="form-control" autocomplete="off" />
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-end">
+                <label class="form-label mb-1" for="phone">
+                  電話 <span class="badge text-bg-danger ms-1">必須</span>
+                </label>
+                <div class="form-text mb-1">20文字以内</div>
+              </div>
+              <input
+                id="phone"
+                name="phone"
+                class="form-control"
+                inputmode="tel"
+                autocomplete="tel"
+                maxlength="20"
+                required
+              />
+              <div class="invalid-feedback">電話番号を入力してください。</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="email">
+                メールアドレス <span class="badge text-bg-secondary ms-1">任意</span>
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                class="form-control"
+                autocomplete="email"
+                placeholder="mail@example.com"
+              />
+              <div class="invalid-feedback">メールアドレスの形式が正しくありません。</div>
+            </div>
+
+            <fieldset class="mb-3">
+              <legend class="col-form-label pt-0">
+                性別 <span class="badge text-bg-secondary ms-1">任意</span>
+              </legend>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="genderMale" value="male" />
+                    <label class="form-check-label" for="genderMale">男性</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="female" />
+                    <label class="form-check-label" for="genderFemale">女性</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="genderOther" value="other" />
+                    <label class="form-check-label" for="genderOther">その他</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="genderNoAnswer" value="no_answer" />
+                    <label class="form-check-label" for="genderNoAnswer">無回答</label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="mb-3">
+              <legend class="col-form-label pt-0">
+                ご職業 <span class="badge text-bg-danger ms-1">必須</span>
+              </legend>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="occupation"
+                      id="occupationEmployee"
+                      value="employee"
+                      required
+                    />
+                    <label class="form-check-label" for="occupationEmployee">会社員</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="occupation" id="occupationExecutive" value="executive" />
+                    <label class="form-check-label" for="occupationExecutive">会社役員</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="occupation" id="occupationPublicServant" value="public_servant" />
+                    <label class="form-check-label" for="occupationPublicServant">公務員</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="occupation" id="occupationSelfEmployed" value="self_employed" />
+                    <label class="form-check-label" for="occupationSelfEmployed">自営業</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="occupation" id="occupationHomemaker" value="homemaker" />
+                    <label class="form-check-label" for="occupationHomemaker">主夫・主婦</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="occupation" id="occupationPartTime" value="part_time" />
+                    <label class="form-check-label" for="occupationPartTime">アルバイト</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="occupation" id="occupationStudent" value="student" />
+                    <label class="form-check-label" for="occupationStudent">学生</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="occupation" id="occupationOther" value="other" />
+                    <label class="form-check-label" for="occupationOther">その他</label>
+                  </div>
+                </div>
+              </div>
+              <div class="invalid-feedback">ご職業を選択してください。</div>
+            </fieldset>
+
+            <div class="mb-3">
+              <label class="form-label" for="industry">
+                業種 <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <select id="industry" name="industry" class="form-select" required>
+                <option value="" selected>選択してください</option>
+                <option>不動産</option>
+                <option>建設</option>
+                <option>製造</option>
+                <option>IT</option>
+                <option>医療</option>
+                <option>教育</option>
+                <option>サービス</option>
+                <option>金融</option>
+                <option>その他</option>
+              </select>
+              <div class="invalid-feedback">業種を選択してください。</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">
+                現在のお困り事について、当てはまるものをお選びください。
+                <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <div class="form-text mb-2">※複数選択可</div>
+              <div id="livingIssuesGroup" class="rounded-2">
+                <div class="row g-2">
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="livingIssues" id="livingIssueMortgage" value="mortgage" />
+                      <label class="form-check-label" for="livingIssueMortgage">住宅ローン</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="livingIssues" id="livingIssueUnsecuredLoan" value="unsecured_loan" />
+                      <label class="form-check-label" for="livingIssueUnsecuredLoan">無担保ローン</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="livingIssues" id="livingIssueInheritance" value="inheritance" />
+                      <label class="form-check-label" for="livingIssueInheritance">相続</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="livingIssues" id="livingIssueRent" value="rent" />
+                      <label class="form-check-label" for="livingIssueRent">離婚</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="livingIssues" id="livingIssueOther" value="other" />
+                      <label class="form-check-label" for="livingIssueOther">その他</label>
+                    </div>
+                  </div>
+                </div>
+                <div id="livingIssuesFeedback" class="invalid-feedback d-none mt-2">
+                  1つ以上選択してください。
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">
+                物件種別 <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <div id="propertyTypesGroup" class="rounded-2">
+                <div class="row g-2">
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="propertyTypes" id="propertyTypeLand" value="land" />
+                      <label class="form-check-label" for="propertyTypeLand">土地</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="propertyTypes" id="propertyTypeHouse" value="house" />
+                      <label class="form-check-label" for="propertyTypeHouse">戸建</label>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="propertyTypes" id="propertyTypeApartment" value="apartment" />
+                      <label class="form-check-label" for="propertyTypeApartment">マンション</label>
+                    </div>
+                  </div>
+                </div>
+                <div id="propertyTypesFeedback" class="invalid-feedback d-none mt-2">
+                  1つ以上選択してください。
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="siteArea">
+                敷地 <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <div class="input-group has-validation">
+                <input
+                  id="siteArea"
+                  name="siteArea"
+                  type="number"
+                  class="form-control"
+                  min="1"
+                  step="0.01"
+                  required
+                />
+                <span class="input-group-text">㎡</span>
+                <div class="invalid-feedback">敷地（㎡）を入力してください。</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="buildingAge">
+                築年数 <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <select id="buildingAge" name="buildingAge" class="form-select" required>
+                <option value="" selected>選択してください</option>
+                <option>0〜5年</option>
+                <option>6〜10年</option>
+                <option>11〜15年</option>
+                <option>16〜20年</option>
+                <option>21〜30年</option>
+                <option>31年以上</option>
+              </select>
+              <div class="invalid-feedback">築年数を選択してください。</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="loanBalance">
+                ローン残債 <span class="badge text-bg-danger ms-1">必須</span>
+              </label>
+              <div class="input-group has-validation">
+                <input
+                  id="loanBalance"
+                  name="loanBalance"
+                  type="number"
+                  class="form-control"
+                  min="0"
+                  step="1"
+                  required
+                />
+                <span class="input-group-text">万円</span>
+                <div class="invalid-feedback">ローン残債（万円）を入力してください。</div>
+              </div>
+            </div>
+
+            <fieldset class="mb-3">
+              <legend class="col-form-label pt-0">
+                債務状況 <span class="badge text-bg-danger ms-1">必須</span>
+              </legend>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="debtStatus"
+                      id="debtStatusOk"
+                      value="no_delinquency"
+                      required
+                    />
+                    <label class="form-check-label" for="debtStatusOk">滞納無し</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="debtStatus" id="debtStatusDelinquent" value="delinquent" />
+                    <label class="form-check-label" for="debtStatusDelinquent">滞納中</label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="debtStatus"
+                      id="debtStatusUnknown"
+                      value="repayment_not_started"
+                    />
+                    <label class="form-check-label" for="debtStatusUnknown">競売開始決定済み</label>
+                  </div>
+                </div>
+              </div>
+              <div class="invalid-feedback">債務状況を選択してください。</div>
+            </fieldset>
+
+            <div id="delinquencyPeriodWrapper" class="mb-3">
+              <label class="form-label" for="delinquencyPeriod">
+                滞納期間 <span class="badge text-bg-secondary ms-1">任意</span>
+              </label>
+              <select id="delinquencyPeriod" name="delinquencyPeriod" class="form-select" disabled>
+                <option value="" selected>選択してください</option>
+                <option>1ヶ月</option>
+                <option>2ヶ月</option>
+                <option>3ヶ月</option>
+                <option>4ヶ月</option>
+                <option>5ヶ月</option>
+                <option>6ヶ月</option>
+                <option>7ヶ月以上</option>
+              </select>
+              <div class="form-text">※滞納中の方は選択してください。</div>
+              <div class="invalid-feedback">滞納期間を選択してください。</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label" for="notes">
+                その他、ご質問・ご相談事項などがあればお書きください
+                <span class="badge text-bg-secondary ms-1">任意</span>
+              </label>
+              <textarea
+                id="notes"
+                name="notes"
+                class="form-control"
+                rows="4"
+                placeholder="例: 住宅ローンの支払いに困っている。"
+              ></textarea>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="privacyConsent" name="privacyConsent" />
+                <label class="form-check-label" for="privacyConsent">
+                  <a href="/privacy/index.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意します
+                </label>
+              </div>
+              <div class="form-text">同意いただけない場合、送信できません。</div>
+              <div id="privacyConsentFeedback" class="invalid-feedback d-none">
+                プライバシーポリシーに同意してください。
+              </div>
+            </div>
+
+            <button id="submitButton" class="btn btn-info w-100 py-2" type="submit" disabled>
+              回答する
+            </button>
+
+            <div id="debugSection" class="mt-3 d-none">
+              <div class="card border-0 bg-light">
+                <div class="card-body py-3">
+                  <div class="small text-muted mb-2">送信内容（デバッグ）</div>
+                  <pre id="debugPayload" class="small mb-0"></pre>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
