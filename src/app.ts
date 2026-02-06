@@ -14,6 +14,7 @@ const debugPayload = document.getElementById("debugPayload") as HTMLPreElement |
 const privacyConsent = document.getElementById("privacyConsent") as HTMLInputElement | null;
 const privacyConsentFeedback = document.getElementById("privacyConsentFeedback") as HTMLDivElement | null;
 const submitButton = document.getElementById("submitButton") as HTMLButtonElement | null;
+const apiBase = (import.meta as { env?: Record<string, string> }).env?.VITE_API_BASE;
 
 type FormPayload = Record<string, unknown> & {
   livingIssues?: string[];
@@ -274,6 +275,11 @@ syncDelinquencyPeriodVisibility();
 syncPrivacyConsentState();
 
 if (form) {
+  if (apiBase) {
+    const normalizedBase = apiBase.replace(/\/$/, "");
+    form.action = `${normalizedBase}/api/submit`;
+  }
+
   if (privacyConsent) {
     privacyConsent.addEventListener("change", () => {
       syncPrivacyConsentState();

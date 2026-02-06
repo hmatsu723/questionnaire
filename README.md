@@ -30,6 +30,11 @@
 
 ※ `worker/.dev.vars` は Git にコミットしないでください。
 
+## フロントのAPI切り替え
+本番で Worker のドメインに送信したい場合は、`VITE_API_BASE` を設定します。
+- 例: `VITE_API_BASE=https://example.workers.dev`
+- 未設定なら `index.html` の `action="/api/submit"` を使用します（ローカルは Vite のプロキシで接続）
+
 ## 起動方法（ローカル）
 ### まとめて起動
 別ターミナル不要で Worker と Vite を同時に起動します。
