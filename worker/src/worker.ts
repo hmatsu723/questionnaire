@@ -104,13 +104,33 @@ function createEmailMessage(payload: Record<string, unknown>) {
   };
 }
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Max-Age": "86400",
+};
+
 function jsonResponse(status: number, body: Record<string, unknown>) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
+      ...corsHeaders,
     },
   });
+}
+
+function isLikelyBot(payload: Record<string, unknown>): boolean {
+  const honeypot = typeof payload.website === "string" ? payload.website.trim() : "";
+  if (honeypot.length > 0) return true;
+
+  const startedAtRaw = payload.formStartedAt;
+  const startedAt = typeof startedAtRaw === "string" ? Number(startedAtRaw) : Number(startedAtRaw);
+  if (!Number.isFinite(startedAt)) return true;
+
+  const elapsedMs = Date.now() - startedAt;
+  return elapsedMs > 0 && elapsedMs < 2000;
 }
 
 export default {
@@ -120,11 +140,19 @@ export default {
       return jsonResponse(404, { ok: false, error: "Not Found" });
     }
 
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders,
+      });
+    }
+
     if (request.method !== "POST") {
       return new Response("Method Not Allowed", {
         status: 405,
         headers: {
           Allow: "POST",
+          ...corsHeaders,
         },
       });
     }
@@ -134,6 +162,10 @@ export default {
       payload = (await request.json()) as Record<string, unknown>;
     } catch {
       return jsonResponse(400, { ok: false, error: "JSON形式が正しくありません。" });
+    }
+
+    if (isLikelyBot(payload)) {
+      return jsonResponse(400, { ok: false, error: "不正な送信が検出されました。" });
     }
 
     if (env.DUMMY_SEND === "true" || env.DUMMY_SEND === "1") {

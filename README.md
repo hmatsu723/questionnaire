@@ -35,6 +35,11 @@
 - 例: `VITE_API_BASE=https://example.workers.dev`
 - 未設定なら `index.html` の `action="/api/submit"` を使用します（ローカルは Vite のプロキシで接続）
 
+## 簡易Bot対策
+以下の軽量対策を入れています（強力な対策が必要なら Turnstile 等を検討してください）。
+- ハニーポット入力（`website`）が埋まっている場合は拒否
+- フォーム表示から2秒以内の送信は拒否
+
 ## 起動方法（ローカル）
 ### まとめて起動
 別ターミナル不要で Worker と Vite を同時に起動します。

@@ -30,6 +30,23 @@
             action="/api/submit"
             novalidate
           >
+            <input
+              id="formStartedAt"
+              name="formStartedAt"
+              type="hidden"
+              value=""
+            />
+            <div class="visually-hidden" aria-hidden="true">
+              <label for="website">Website</label>
+              <input
+                id="website"
+                name="website"
+                type="text"
+                autocomplete="off"
+                tabindex="-1"
+                class="form-control"
+              />
+            </div>
             <div class="mb-3">
               <label class="form-label">
                 名前 <span class="badge text-bg-danger ms-1">必須</span>

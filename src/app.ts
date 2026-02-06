@@ -15,6 +15,8 @@ const privacyConsent = document.getElementById("privacyConsent") as HTMLInputEle
 const privacyConsentFeedback = document.getElementById("privacyConsentFeedback") as HTMLDivElement | null;
 const submitButton = document.getElementById("submitButton") as HTMLButtonElement | null;
 const apiBase = (import.meta as { env?: Record<string, string> }).env?.VITE_API_BASE;
+const formStartedAtInput = document.getElementById("formStartedAt") as HTMLInputElement | null;
+const honeypotInput = document.getElementById("website") as HTMLInputElement | null;
 
 type FormPayload = Record<string, unknown> & {
   livingIssues?: string[];
@@ -136,6 +138,7 @@ function showAlert(message: string, type: "success" | "danger"): void {
       ${message}
     </div>
   `;
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 /**
@@ -275,6 +278,10 @@ syncDelinquencyPeriodVisibility();
 syncPrivacyConsentState();
 
 if (form) {
+  if (formStartedAtInput) {
+    formStartedAtInput.value = String(Date.now());
+  }
+
   if (apiBase) {
     const normalizedBase = apiBase.replace(/\/$/, "");
     form.action = `${normalizedBase}/api/submit`;
@@ -326,6 +333,24 @@ if (form) {
   });
 
   form.addEventListener("submit", async (event) => {
+    if (honeypotInput && honeypotInput.value.trim() !== "") {
+      event.preventDefault();
+      event.stopPropagation();
+      showAlert("送信に失敗しました。時間をおいて再度お試しください。", "danger");
+      return;
+    }
+
+    if (formStartedAtInput) {
+      const startedAt = Number(formStartedAtInput.value);
+      const elapsedMs = Number.isFinite(startedAt) ? Date.now() - startedAt : 0;
+      if (elapsedMs > 0 && elapsedMs < 2000) {
+        event.preventDefault();
+        event.stopPropagation();
+        showAlert("送信に失敗しました。時間をおいて再度お試しください。", "danger");
+        return;
+      }
+    }
+
     if (privacyConsent && !privacyConsent.checked) {
       event.preventDefault();
       event.stopPropagation();
